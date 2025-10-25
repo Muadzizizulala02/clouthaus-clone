@@ -1,0 +1,26 @@
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* MODIFIED: Make it fill its parent (the 100vh .scroll-section) */
+  width: 100%;
+  height: 100%; 
+  
+  /* REMOVED: padding-top: 56px; */
+  /* REMOVED: box-sizing: border-box; */
+}
+
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+}

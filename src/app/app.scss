@@ -1,0 +1,12 @@
+/* This is our new scroll container */
+.scroll-container {
+ 
+
+  /* The container must be 100% of the viewport height... */
+  height: 100vh;
+  
+  /* ...and it must be the element that scrolls */
+  overflow-y: scroll;
+
+  
+}

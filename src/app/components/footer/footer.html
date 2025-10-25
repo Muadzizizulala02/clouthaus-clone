@@ -1,0 +1,33 @@
+<footer class="py-5 bg-white text-dark">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h5>TA Global</h5>
+        <p class="small">
+          An innovator firmly focused in defying the usual mould of the property industry, 
+          TA Global works fearlessly in crafting distinctive living experiences for all.
+        </p>
+        <p class="small text-muted">
+          © 2024 TA Global. All Rights Reserved.
+        </p>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <b>CloutHaus Sales Gallery</b> <br>
+        <span class="small">
+          {{ address1 }}<br>
+          {{ address2 }}<br>
+          {{ address3 }}
+        </span>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <b>Phone:</b>
+        <a class="text-dark d-block small" [href]="'tel:' + phone">{{ phone }}</a>
+        <br>
+        <b>Email:</b>
+        <a class="text-dark d-block small" [href]="'mailto:' + email">{{ email }}</a>
+      </div>
+    </div>
+  </div>
+</footer>

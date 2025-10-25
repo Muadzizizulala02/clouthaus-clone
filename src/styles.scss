@@ -1,1 +1,57 @@
-/* You can add global styles to this file, and also import other style files */
+/* 1. Set the background color and hide body scrollbar */
+body {
+  background-color: #F8F4ED;
+  overflow: hidden; /* Prevents double scrollbars */
+}
+
+/* 2. REMOVE the old smooth scroll from <html> */
+/* html {
+  scroll-behavior: smooth;  <-- DELETE THIS ENTIRE BLOCK
+} 
+*/
+
+/* 3. Adjust global typography (Keep this) */
+h1, .h1, .display-5 {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 4. MODIFY our old .page-section styles */
+/* We rename .page-section to .scroll-section 
+  to match our new HTML.
+*/
+.scroll-section {
+  
+
+  /* Each "page" must be 100vh to fill the screen */
+  height: 100vh;
+  
+  /* Allows scrolling *within* a section if its content
+    is too tall (e.g., on a small screen).
+  */
+  overflow-y: auto; 
+  
+  /* Layout styles for the content */
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 5. Special handling for the last (contact/footer) section */
+#register {
+  /* It has two components, so we align them to the top 
+    instead of centering them.
+  */
+  justify-content: flex-start;
+  /* And it needs its own background color */
+  background-color: #f8f9fa; /* Bootstrap's 'bg-light' color */
+}
+
+/* 6. Special handling for the Hero section */
+#hero {
+  padding: 0; /* Remove padding so the video can be edge-to-edge */
+}
