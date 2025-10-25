@@ -1,38 +1,24 @@
 /* 1. Set the background color and hide body scrollbar */
 body {
-  background-color: #F8F4ED;
-  overflow: hidden; /* Prevents double scrollbars */
+  background-color: #000; /* dark background looks cleaner behind the hero */
+  
 }
 
-/* 2. REMOVE the old smooth scroll from <html> */
-/* html {
-  scroll-behavior: smooth;  <-- DELETE THIS ENTIRE BLOCK
-} 
-*/
-
 /* 3. Adjust global typography (Keep this) */
-h1, .h1, .display-5 {
+h1,
+.h1,
+.display-5 {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-/* 4. MODIFY our old .page-section styles */
-/* We rename .page-section to .scroll-section 
-  to match our new HTML.
-*/
 .scroll-section {
-  
-
   /* Each "page" must be 100vh to fill the screen */
   height: 100vh;
-  
-  /* Allows scrolling *within* a section if its content
-    is too tall (e.g., on a small screen).
-  */
-  overflow-y: auto; 
-  
+  overflow-y: auto;
+
   /* Layout styles for the content */
   padding-top: 5rem;
   padding-bottom: 5rem;
@@ -54,4 +40,14 @@ h1, .h1, .display-5 {
 /* 6. Special handling for the Hero section */
 #hero {
   padding: 0; /* Remove padding so the video can be edge-to-edge */
+}
+
+/* initial hidden state to avoid flash */
+.anim-image,
+.anim-text {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  transition: none !important; // Prevent CSS from overriding GSAP
+  /* don't use CSS transitions here — GSAP controls it */
 }

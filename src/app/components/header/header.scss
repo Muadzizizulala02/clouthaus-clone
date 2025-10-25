@@ -1,0 +1,28 @@
+.translucent-nav {
+  background-color: rgba(0, 0, 0, 0.232);
+  backdrop-filter: blur(10px);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.translucent-nav .nav-link,
+.translucent-nav .navbar-brand {
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.translucent-nav .nav-link:hover {
+  color: #dcdcdc;
+}
+
+.translucent-nav.nav-light {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.translucent-nav.nav-light .nav-link,
+.translucent-nav.nav-light .navbar-brand {
+  color: black;
+}
+
+.translucent-nav.nav-light .nav-link:hover {
+  color: #444;
+}

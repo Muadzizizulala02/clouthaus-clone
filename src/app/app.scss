@@ -1,12 +1,19 @@
 /* This is our new scroll container */
 .scroll-container {
- 
-
   /* The container must be 100% of the viewport height... */
   height: 100vh;
-  
+
   /* ...and it must be the element that scrolls */
   overflow-y: scroll;
+}
 
-  
+#section-0 {
+  background-color: #ffffff; // soft yellow
+}
+
+#section-1 {
+  background-color: #e8e4dc; // soft yellow
+}
+#section-3 {
+  background-color: #e8e4dc; // soft yellow
 }

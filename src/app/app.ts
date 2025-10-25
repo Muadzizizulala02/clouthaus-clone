@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, importProvidersFrom } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Observable, tap } from 'rxjs';
@@ -12,7 +12,6 @@ import { ContentSectionComponent } from './components/content-section/content-se
 import { ContactFormComponent } from './components/contact-form/contact-form';
 import { FooterComponent } from './components/footer/footer';
 
-// --- NEW: Import GSAP and its ScrollToPlugin ---
 import { gsap } from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
@@ -20,7 +19,7 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     RouterOutlet,
     HeaderComponent,
     HeroComponent,
@@ -32,29 +31,16 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
   styleUrl: './app.scss'
 })
 export class AppComponent implements OnInit {
-  
   public data$!: Observable<ProjectContent>;
   public sectionIds: string[] = [];
   private currentSectionIndex = 0;
+  private previousSectionIndex = 0;
   private isScrolling = false;
 
-  // --- NEW: This is where you control the animation "feel" ---
-  /**
-   * The duration of the scroll animation in seconds.
-   * (e.g., 0.8 = fast, 1.5 = slow)
-   */
-  private scrollDuration = 1.2;
-
-  /**
-   * The easing function for the animation.
-   * "power2.inOut" is a smooth start and end.
-   * Other options: "power1.inOut", "expo.inOut", "elastic.out(1, 0.3)"
-   */
-  private scrollEase = "power2.inOut";
-  
+  private scrollDuration = 1.1;
+  private scrollEase = 'power2.inOut';
 
   constructor(private dataService: DataService) {
-    // --- NEW: Register the GSAP plugin so we can use it ---
     gsap.registerPlugin(ScrollToPlugin);
   }
 
@@ -66,65 +52,104 @@ export class AppComponent implements OnInit {
           data.projectDetails.forEach((_, i) => this.sectionIds.push(`section-${i}`));
           this.sectionIds.push('register');
         }
+
+        // ✅ Animate first section on load
+        setTimeout(() => this.animateInnerSection(document.getElementById('hero')), 300);
       })
     );
   }
 
-  // This function is unchanged
-  @HostListener('window:wheel', ['$event'])
-  onWindowScroll(event: WheelEvent) {
+  // ✅ One scroll = one section move
+  @HostListener('wheel', ['$event'])
+  onWheel(event: WheelEvent) {
     event.preventDefault();
-    if (this.isScrolling) {
-      return;
-    }
 
-    const direction = event.deltaY > 0 ? 'down' : 'up';
+    if (this.isScrolling) return;
+    this.previousSectionIndex = this.currentSectionIndex;
 
-    if (direction === 'down') {
+    if (event.deltaY > 0) {
+      // Scroll down
       if (this.currentSectionIndex < this.sectionIds.length - 1) {
         this.currentSectionIndex++;
       }
     } else {
+      // Scroll up
       if (this.currentSectionIndex > 0) {
         this.currentSectionIndex--;
       }
     }
-    this.scrollToSection(this.sectionIds[this.currentSectionIndex]);
+
+    if (this.previousSectionIndex !== this.currentSectionIndex) {
+      this.isScrolling = true;
+      this.scrollToSection(event.deltaY > 0); // Pass true if scrolling down
+    }
   }
 
-  // This function is unchanged
+  // ✅ Header navigation click
   public onHeaderNavigation(id: string) {
     const index = this.sectionIds.indexOf(id);
     if (index > -1 && !this.isScrolling) {
-      this.currentSectionIndex = index; // Update the index
-      this.scrollToSection(id); // Scroll to the section
+      this.previousSectionIndex = this.currentSectionIndex;
+      this.currentSectionIndex = index;
+      this.isScrolling = true;
+      this.scrollToSection(index > this.previousSectionIndex);
     }
   }
-  
-  // --- MODIFIED: This function now uses GSAP ---
-  private scrollToSection(id: string) {
-    const element = document.getElementById(id);
+
+  // ✅ Handles smooth scroll + optional transition
+  private scrollToSection(isScrollingDown: boolean) {
     const container = document.querySelector('.scroll-container');
-    
-    if (element && container) {
-      this.isScrolling = true; // Set cooldown START
+    const targetElement = document.getElementById(this.sectionIds[this.currentSectionIndex]);
 
-      // Use GSAP to animate the scroll
-      gsap.to(container, {
-        duration: this.scrollDuration, // Use our controllable duration
-        scrollTo: { 
-          y: element.offsetTop // Scroll to the element's top position
-        },
-        ease: this.scrollEase, // Use our controllable ease
-        onComplete: () => {
-          // Set cooldown END when animation is finished
-          this.isScrolling = false; 
-        }
-      });
+    if (!container || !targetElement) {
+      this.isScrolling = false;
+      return;
     }
+
+    gsap.to(container, {
+      duration: this.scrollDuration,
+      scrollTo: { y: targetElement.offsetTop },
+      ease: this.scrollEase,
+      onComplete: () => {
+        this.isScrolling = false;
+
+        // Only animate inner content when scrolling down
+        if (isScrollingDown) {
+          this.animateInnerSection(targetElement);
+        }
+      }
+    });
   }
 
-  // --- REMOVED: We no longer need the separate setScrollCooldown function ---
-  // The GSAP onComplete callback handles this perfectly.
+  // ✅ Animate content inside the section (no warnings, no blinking)
+  private animateInnerSection(targetElement: HTMLElement | null) {
+    if (!targetElement || targetElement.classList.contains('revealed')) return;
 
+    const targetContent = Array.from(
+      targetElement.querySelectorAll('.anim-image, .anim-text')
+    );
+
+    if (targetContent.length === 0) {
+      targetElement.classList.add('revealed');
+      return;
+    }
+
+    gsap.set(targetContent, { autoAlpha: 0, y: 30 });
+
+    gsap.fromTo(
+      targetContent,
+      { autoAlpha: 0, y: 30 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power2.out',
+        stagger: 0.08,
+        immediateRender: false,
+        onComplete: () => {
+          targetElement.classList.add('revealed');
+        }
+      }
+    );
+  }
 }

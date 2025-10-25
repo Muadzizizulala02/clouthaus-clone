@@ -6,9 +6,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './hero.html',
-  styleUrl: './hero.scss'
+  styleUrl: './hero.scss' 
 })
 export class HeroComponent {
-  // We receive the video URL from app.component
   @Input() videoUrl: string = '';
 }

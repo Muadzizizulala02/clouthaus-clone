@@ -2,11 +2,11 @@
   <div class="container">
     <div class="row align-items-center" [ngClass]="{ 'flex-row-reverse': isReversed }">
       
-      <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
+      <div class="col-lg-6 col-md-12 mb-4 mb-lg-0 anim-image">
         <img [src]="detail.imageUrl" [alt]="detail.name" class="img-fluid rounded shadow-sm">
       </div>
 
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-6 col-md-12 anim-text">
         <h1 class="display-5" [innerHTML]="detail.name"></h1>
         <p class="lead" [innerHTML]="detail.description"></p>
         <p *ngIf="detail.param1" [innerHTML]="detail.param1"></p>
