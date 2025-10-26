@@ -1,0 +1,22 @@
+// :host is a special selector that targets this component's elements
+// without affecting other components.
+:host {
+
+  // Target the <p> tag that has the "lead" class
+  p.lead {
+    // Bootstrap's default is 1.25rem. Let's make it smaller.
+    font-size: 1.2rem; 
+  }
+
+  // Target the main image
+  img.img-fluid {
+    
+    max-width: 90%;
+    
+    // Center the image within its column
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+// You can leave any other styles in this file as-is.

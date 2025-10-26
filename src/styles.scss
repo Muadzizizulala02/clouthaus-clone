@@ -1,25 +1,29 @@
-/* 1. Set the background color and hide body scrollbar */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Oswald:wght@200..700&family=Overlock:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 body {
-  background-color: #000; /* dark background looks cleaner behind the hero */
-  
+  background-color: #000; 
 }
 
-/* 3. Adjust global typography (Keep this) */
+// Adjust global typography (Keep this)
 h1,
 .h1,
 .display-5 {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Overlock', sans-serif;
   font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 4px;
+}
+
+p {
+  font-family: "Montserrat", serif;
+  line-height: 1.6; /* Example: improve readability */
 }
 
 .scroll-section {
-  /* Each "page" must be 100vh to fill the screen */
+  //Each "page" must be 100vh to fill the screen
   height: 100vh;
   overflow-y: auto;
 
-  /* Layout styles for the content */
+  //Layout styles for the content
   padding-top: 5rem;
   padding-bottom: 5rem;
   display: flex;
@@ -27,14 +31,12 @@ h1,
   justify-content: center;
 }
 
-/* 5. Special handling for the last (contact/footer) section */
+//Special handling for the last (contact/footer) section
 #register {
-  /* It has two components, so we align them to the top 
-    instead of centering them.
-  */
   justify-content: flex-start;
-  /* And it needs its own background color */
-  background-color: #f8f9fa; /* Bootstrap's 'bg-light' color */
+  background-color: #ffffff;
+  padding-bottom: 0;
+  height: auto;
 }
 
 /* 6. Special handling for the Hero section */
@@ -42,12 +44,9 @@ h1,
   padding: 0; /* Remove padding so the video can be edge-to-edge */
 }
 
-/* initial hidden state to avoid flash */
 .anim-image,
 .anim-text {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-  transition: none !important; // Prevent CSS from overriding GSAP
-  /* don't use CSS transitions here — GSAP controls it */
+  /* Start invisible */
+  visibility: hidden;
+  opacity: 0;
 }

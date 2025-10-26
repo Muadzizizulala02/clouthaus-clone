@@ -1,0 +1,17 @@
+/* This is the main footer container */
+.footer-container {
+  /* Set your desired background color */
+  background-color: #e8e4dc; 
+  
+  /* Set the text color to be light */
+  color: #000000; 
+
+  /* Make links light as well */
+  a {
+    color: #050505;
+  }
+
+  a:hover {
+    color: #4b4444;
+  }
+}

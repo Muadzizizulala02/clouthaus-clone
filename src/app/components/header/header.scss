@@ -2,6 +2,7 @@
   background-color: rgba(0, 0, 0, 0.232);
   backdrop-filter: blur(10px);
   transition: background-color 0.5s ease, color 0.5s ease;
+  font-family: 'Neuton', sans-serif;
 }
 
 .translucent-nav .nav-link,
@@ -26,3 +27,4 @@
 .translucent-nav.nav-light .nav-link:hover {
   color: #444;
 }
+

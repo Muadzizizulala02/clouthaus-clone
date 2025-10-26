@@ -1,0 +1,26 @@
+// :host targets all elements inside this component
+:host {
+
+  // Make the main title "SEEKING EXTRAVAGANCE?" smaller
+  h2.display-5 {
+    font-size: 2.5rem; // Default is 3rem
+  }
+
+  // Make the subtitle "Leave your mark..." smaller
+  p.lead {
+    font-size: 1.1rem; // Default is 1.25rem
+  }
+
+  // Make all the form labels, input fields, and checkbox text smaller
+  .form-label,
+  .form-control,
+  .form-select,
+  .form-check-label {
+    font-size: 0.9rem; // Default is 1rem
+  }
+
+  // Optional: Make the button text smaller to match
+  .btn {
+    font-size: 0.9rem;
+  }
+}

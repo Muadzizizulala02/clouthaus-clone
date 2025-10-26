@@ -15,7 +15,7 @@ export class DataService {
 
   constructor(private http: HttpClient) {
     // timer(0, 30000) = start immediately (0ms), then run every 30 seconds (30000ms).
-    this.projectData$ = timer(0, 30000).pipe(
+    this.projectData$ = timer(0, 30000000).pipe(
       // switchMap cancels the previous request and switches to a new one
       switchMap(() => 
         this.http.get<ApiResponse>(this.dataUrl).pipe(
