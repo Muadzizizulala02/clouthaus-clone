@@ -10,7 +10,7 @@ export class DataService {
   private dataUrl = 'assets/general.json';
   
   // This is the main Observable that our components will use.
-  // It will automatically update with new data every 30 seconds.
+  // It will automatically update with new data every 300000 seconds.
   public projectData$: Observable<ProjectContent>;
 
   constructor(private http: HttpClient) {

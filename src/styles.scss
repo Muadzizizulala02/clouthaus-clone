@@ -1,10 +1,12 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Oswald:wght@200..700&family=Overlock:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+
 body {
-  background-color: #000; 
+  background-color: #000;
+  margin: 0;
+  overflow: hidden; /* Keep this to prevent body scrolling */
 }
 
-// Adjust global typography (Keep this)
+/* Adjust global typography */
 h1,
 .h1,
 .display-5 {
@@ -15,33 +17,7 @@ h1,
 
 p {
   font-family: "Montserrat", serif;
-  line-height: 1.6; /* Example: improve readability */
-}
-
-.scroll-section {
-  //Each "page" must be 100vh to fill the screen
-  height: 100vh;
-  overflow-y: auto;
-
-  //Layout styles for the content
-  padding-top: 5rem;
-  padding-bottom: 5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-//Special handling for the last (contact/footer) section
-#register {
-  justify-content: flex-start;
-  background-color: #ffffff;
-  padding-bottom: 0;
-  height: auto;
-}
-
-/* 6. Special handling for the Hero section */
-#hero {
-  padding: 0; /* Remove padding so the video can be edge-to-edge */
+  line-height: 1.6;
 }
 
 .anim-image,

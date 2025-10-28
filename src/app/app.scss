@@ -1,14 +1,51 @@
-/* This is our new scroll container */
+/* This is our main scroll container */
 .scroll-container {
-  /* The container must be 100% of the viewport height... */
+  /* The container must be 100% of the viewport height and width */
   height: 100vh;
-
-  /* ...and it must be the element that scrolls */
-  overflow-y: scroll;
+  width: 100vw;
+  
+  /* This element handles all scrolling */
+  overflow-y: auto;
+  
+  /* Remove smooth scrolling - GSAP handles this */
+  scroll-behavior: auto;
+  
+  /* Position relative for proper offset calculations */
+  position: relative;
 }
 
-#section-0 {
-  background-color: #ffffff; 
+/* Ensure all sections are properly sized */
+.scroll-section {
+  /* Each "page" must be 100vh to fill the screen */
+  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+  
+  /* Remove any overflow - parent handles scrolling */
+  overflow: visible;
+  
+  /* Layout styles for the content */
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+/* Special handling for the last (contact/footer) section */
+#register {
+  justify-content: flex-start;
+  background-color: #ffffff;
+  padding-bottom: 0;
+  height: auto; /* This section can have natural height */
+  min-height: 100vh; /* But at least 100vh */
+}
+
+/* Special handling for the Hero section */
+#hero {
+  padding: 0; /* Remove padding so the video can be edge-to-edge */
+  height: 100vh;
 }
 
 #section-1 {
@@ -17,7 +54,45 @@
 #section-3 {
   background-color: #e8e4dc; 
 }
-
 #section-5 {
   background-color: #e8e4dc; 
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  .scroll-section {
+    /* Allow sections to be taller than viewport on mobile */
+    height: auto;
+    min-height: 100vh;
+    
+    /* Adjust padding for mobile */
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    
+    /* Ensure content doesn't get cut off */
+    overflow: visible;
+  }
+
+  /* Specific fix for register section on mobile */
+  #register {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  /* Ensure scroll container works properly on mobile */
+  .scroll-container {
+    /* Keep scrolling enabled */
+    overflow-y: auto;
+    
+    /* Prevent horizontal scrolling */
+    overflow-x: hidden;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+  .scroll-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
 }
