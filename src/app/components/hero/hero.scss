@@ -29,14 +29,3 @@ html, body {
   z-index: -1;
 }
 
-/* Mobile optimization */
-@media (max-width: 768px) {
-  .hero-section {
-    height: 100vh; /* keep full-screen on mobile too */
-  }
-
-  .hero-video {
-    object-fit: cover;
-    height: 100%;
-  }
-}

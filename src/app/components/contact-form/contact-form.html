@@ -9,40 +9,41 @@
     
     <div class="row mt-4">
       <div class="col-lg-10 mx-auto">
-        <form>
+        <!-- FORM -->
+        <form id="contactForm" action="https://formspree.io/f/xeopgrdq" method="POST">
           <div class="row g-3">
             <div class="col-md-6">
               <label for="name" class="form-label">Name:</label>
-              <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required>
             </div>
             
             <div class="col-md-6">
               <label for="email" class="form-label">Email:</label>
-              <input type="email" class="form-control" id="email" placeholder="example@email.com" required>
+              <input type="email" class="form-control" id="email" name="email" placeholder="example@email.com" required>
             </div>
             
             <div class="col-md-6">
               <label for="contact" class="form-label">Contact Number:</label>
-              <input type="text" class="form-control" id="contact" placeholder="+60123456789" required>
+              <input type="text" class="form-control" id="contact" name="contact" placeholder="+60123456789" required>
             </div>
             
             <div class="col-md-6">
               <label for="method" class="form-label">How did you hear about us:</label>
-              <select class="form-select" id="method" required>
+              <select class="form-select" id="method" name="method" required>
                 <option selected disabled value="">Select here</option>
-                <option value="1">Social Media</option>
-                <option value="2">Family / Friends</option>
-                <option value="3">Email / News</option>
-                <option value="4">Events / Exhibitions / Roadshows</option>
-                <option value="5">Newspaper / Banner / Bunting</option>
-                <option value="6">Hoarding</option>
-                <option value="7">Others</option>
+                <option>Social Media</option>
+                <option>Family / Friends</option>
+                <option>Email / News</option>
+                <option>Events / Exhibitions / Roadshows</option>
+                <option>Newspaper / Banner / Bunting</option>
+                <option>Hoarding</option>
+                <option>Others</option>
               </select>
             </div>
             
             <div class="col-12 d-flex justify-content-center mt-4">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="consent" required>
+                <input class="form-check-input" type="checkbox" id="consent" required>
                 <label class="form-check-label" for="consent">
                   I confirm that I have read and understand your Privacy Policy.
                 </label>
@@ -54,7 +55,42 @@
             </div>
           </div>
         </form>
+
+        <!-- SUCCESS MESSAGE (hidden at first) -->
+        <div id="successMessage" class="text-center mt-5" style="display:none;">
+          <h3 class="text-success">✅ Registration Completed!</h3>
+          <p>We will contact you soon.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- SCRIPT -->
+<script>
+  const form = document.getElementById('contactForm');
+  const successMessage = document.getElementById('successMessage');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault(); // prevent default page reload
+
+    const formData = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        form.reset(); // clear form fields
+        form.style.display = 'none'; // hide form
+        successMessage.style.display = 'block'; // show success text
+      } else {
+        alert('Oops! Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      alert('Error submitting form.');
+    }
+  });
+</script>

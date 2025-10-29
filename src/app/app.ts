@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Observable, tap } from 'rxjs';
@@ -27,7 +27,7 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit {
   public data$!: Observable<ProjectContent>; //This will hold data fetched from DataService
   public sectionIds: string[] = []; //nak store section id mana so angular know which one to scroll into
 
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           data.projectDetails.forEach((_, i) => this.sectionIds.push(`section-${i}`));
           this.sectionIds.push('register'); // add register as last section id
         }
-        
+
         // Wait for the view to update with the data, then setup scroll container
         setTimeout(() => {
           this.setupScrollContainer();
@@ -67,36 +67,62 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  ngAfterViewInit(): void {
-    // Initial setup attempt - but container might not exist yet due to *ngIf
-    setTimeout(() => {
-      this.setupScrollContainer();
-    }, 500);
-  }
-
-  ngOnDestroy(): void {
-    // Clean up the scroll listener when component is destroyed
-    if (this.scrollListener && this.scrollContainer) {
-      this.scrollContainer.removeEventListener('scroll', this.scrollListener);
-    }
-  }
-
   // Setup scroll container after data loads and view updates
   private setupScrollContainer() {
     if (this.scrollContainer) return; // Already setup
-    
+    // Cari scrollable container element
     this.scrollContainer = document.querySelector('.scroll-container');
-    
+
     if (this.scrollContainer && !this.scrollListener) {
       this.scrollListener = this.onScrollbar.bind(this);
       this.scrollContainer.addEventListener('scroll', this.scrollListener);
     }
   }
 
+  // listen to scrollbar event (regular browser scrollbar)
+  private onScrollbar(event: Event) {
+    if (this.isScrolling) return; // Prevents conflict with wheel/header animations
+
+    // Detect which section is currently visible and trigger its animation
+    this.detectVisibleSection();
+  }
+
+  // logic to detect which section is currently visible when using scrollbar
+  private detectVisibleSection() {
+    if (!this.scrollContainer) {
+      this.scrollContainer = document.querySelector('.scroll-container');
+      if (!this.scrollContainer) return;
+    }
+
+    const scrollTop = this.scrollContainer.scrollTop; // current scroll position
+    const containerHeight = this.scrollContainer.clientHeight; // height of visible area
+
+    // Check each section to see which one is currently in view
+    for (let i = 0; i < this.sectionIds.length; i++) {
+      const section = document.getElementById(this.sectionIds[i]);
+      if (section) {
+        const sectionTop = section.offsetTop; // section position from top
+        const sectionBottom = sectionTop + section.offsetHeight; // section bottom position
+
+        // Check if section is mostly in view (adjust these values as needed)
+        const triggerPoint = containerHeight * 0.5; // Trigger when 50% of section is visible
+
+        if (scrollTop >= sectionTop - triggerPoint && scrollTop <= sectionBottom - triggerPoint) {
+          // If we found a new section that's visible
+          if (this.currentSectionIndex !== i) {
+            this.currentSectionIndex = i;
+            // Trigger animation for this section
+            this.animateInnerSection(section);
+          }
+          break; // Stop checking once we found the visible section
+        }
+      }
+    }
+  }
+
   // listen to mousewheel event
   @HostListener('wheel', ['$event']) //Angular decorator that listens to DOM events on the component
   onWheel(event: WheelEvent) {
-    // Only prevent default if we're going to handle the scroll
     if (this.isScrolling) return; // Prevents multiple rapid scrolls while animation is in progress
 
     this.previousSectionIndex = this.currentSectionIndex; // nak tracking navigation history
@@ -120,14 +146,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // listen to scrollbar event (regular browser scrollbar)
-  private onScrollbar(event: Event) {
-    if (this.isScrolling) return; // Prevents conflict with wheel/header animations
-
-    // Detect which section is currently visible and trigger its animation
-    this.detectVisibleSection();
-  }
-
   // Nak handle navigation clicks (from header)
   public onHeaderNavigation(id: string) {
     const index = this.sectionIds.indexOf(id);
@@ -138,9 +156,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentSectionIndex = index;
       // still scroll eventho from nav header
       this.isScrolling = true;
-      this.scrollToSection(); 
+      this.scrollToSection();
     }
-  } 
+  }
 
   // the logic behind animation execution
   private scrollToSection() {
@@ -148,7 +166,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     const container = this.scrollContainer || document.querySelector('.scroll-container');
     // get the target position
     const targetElement = document.getElementById(this.sectionIds[this.currentSectionIndex]);
-    
+
     // validation to check if the target is exist or not
     if (!container || !targetElement) {
       this.isScrolling = false;
@@ -162,46 +180,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       scrollTo: { y: targetElement.offsetTop },
       ease: this.scrollEase,
       onComplete: () => {
-        this.isScrolling = false; 
+        this.isScrolling = false;
         // nak animate inner content
         this.animateInnerSection(targetElement);
       },
     });
-  }
-
-  // logic to detect which section is currently visible when using scrollbar
-  private detectVisibleSection() {
-    if (!this.scrollContainer) {
-      this.scrollContainer = document.querySelector('.scroll-container');
-      if (!this.scrollContainer) return;
-    }
-    
-    const scrollTop = this.scrollContainer.scrollTop; // current scroll position
-    const containerHeight = this.scrollContainer.clientHeight; // height of visible area
-    
-    // Check each section to see which one is currently in view
-    for (let i = 0; i < this.sectionIds.length; i++) {
-      const section = document.getElementById(this.sectionIds[i]);
-      if (section) {
-        const sectionTop = section.offsetTop; // section position from top
-        const sectionBottom = sectionTop + section.offsetHeight; // section bottom position
-        
-        // Check if section is mostly in view (adjust these values as needed)
-        const triggerPoint = containerHeight * 0.5; // Trigger when 50% of section is visible
-        
-        if (scrollTop >= sectionTop - triggerPoint && 
-            scrollTop <= sectionBottom - triggerPoint) {
-          
-          // If we found a new section that's visible
-          if (this.currentSectionIndex !== i) {
-            this.currentSectionIndex = i;
-            // Trigger animation for this section
-            this.animateInnerSection(section);
-          }
-          break; // Stop checking once we found the visible section
-        }
-      }
-    }
   }
 
   // the logic of animation dalam section
